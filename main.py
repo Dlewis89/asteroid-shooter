@@ -23,7 +23,6 @@ class Ship(pygame.sprite.Sprite):
             if current_time - self.shoot_time > 500:
                 self.can_shoot = True
 
-
     def update(self):
         self.input_position()
         self.laser_timer()
@@ -35,7 +34,13 @@ class Laser(pygame.sprite.Sprite):
         self.image = pygame.image.load('./assets/graphics/laser.png').convert_alpha()
         self.rect = self.image.get_rect(midbottom = pos)
 
+        self.pos = pygame.math.Vector2(self.rect.topleft)
+        self.direction = pygame.math.Vector2(0, -1)
+        self.speed = 600
 
+    def update(self):
+        self.pos += self.speed * self.direction * dt
+        self.rect.topleft = (round(self.pos.x), round(self.pos.y))
 
 pygame.init()
 
@@ -65,10 +70,11 @@ while True:
             sys.exit()
 
     #delta
-    dt = clock.tick() / 1000
+    dt = clock.tick(120) / 1000
 
     #update
     spaceship_group.update()
+    laser_group.update()
 
     #graphics
     display_surface.blit(background_surf, (0, 0))

@@ -13,9 +13,9 @@ class Ship(pygame.sprite.Sprite):
 
     def laser_shoot(self):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
-            print('shoot laser')
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
+            Laser(laser_group, self.rect.midtop)
 
     def laser_timer(self):
         if not self.can_shoot:
@@ -52,13 +52,12 @@ pygame.display.set_caption('Space Shooter')
 
 clock = pygame.time.Clock()
 
-background_surf = pygame.image.load('./assets/graphics/background.png').convert_alpha()
+background_surf = pygame.image.load('./assets/graphics/background.png').convert()
 
 spaceship_group = pygame.sprite.GroupSingle()
 laser_group = pygame.sprite.Group()
 
 ship = Ship(spaceship_group)
-laser = Laser(laser_group, (100, 300))
 
 #game loop
 while True:

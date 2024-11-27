@@ -46,15 +46,31 @@ class Laser(pygame.sprite.Sprite):
 class Meteor(pygame.sprite.Sprite):
     def __init__(self, groups, pos):
         super().__init__(groups)
-        self.image = pygame.image.load('./assets/graphics/meteor.png').convert_alpha()
+        self.meteor_surf = pygame.image.load('./assets/graphics/meteor.png').convert_alpha()
+        self.meteor_size = pygame.math.Vector2(self.meteor_surf.get_size()) * uniform(0.5, 1.5)
+        self.scaled_surf = pygame.transform.scale(
+            self.meteor_surf,
+            self.meteor_size
+        )
+        self.image = self.scaled_surf
         self.rect = self.image.get_rect(center = pos)
         self.pos = pygame.math.Vector2(self.rect.topleft)
         self.direction = pygame.math.Vector2(uniform(-0.5, 0.5), 1)
         self.speed = randint(400, 600)
 
+        self.rotation = 0
+        self.rotation_speed = randint(20, 50)
+
+    def rotate(self):
+        self.rotation += self.rotation_speed * dt
+        rotated_surf = pygame.transform.rotozoom(self.scaled_surf, self.rotation, 1)
+        self.image = rotated_surf
+        self.rect = self.image.get_rect(center = self.rect.center)
+
     def update(self):
         self.pos += self.speed * self.direction * dt
         self.rect.topleft = (round(self.pos.x), round(self.pos.y))
+        self.rotate()
 
 class Score:
     def __init__(self):

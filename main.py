@@ -90,7 +90,7 @@ class Meteor(pygame.sprite.Sprite):
         self.pos += self.speed * self.direction * dt
         self.rect.topleft = (round(self.pos.x), round(self.pos.y))
 
-        if self.rect.top < WINDOW_HEIGHT:
+        if self.rect.top > WINDOW_HEIGHT:
             self.kill()
 
         self.rotate()
